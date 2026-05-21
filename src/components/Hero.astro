@@ -1,0 +1,203 @@
+---
+import Decor from "./Decor.astro";
+import VslPlayer from "./VslPlayer.astro";
+---
+
+<section class="hero-section relative isolate overflow-hidden flex min-h-[100svh] flex-col">
+  <!-- ─────────────────────────────────────────
+       BACKGROUND VIDEO — Cinematic full screen
+       ───────────────────────────────────────── -->
+  <div class="absolute inset-0 -z-10">
+    <!-- Video hero: autoplay mudo + loop. Poster carrega antes pra evitar CLS -->
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      poster="/bg_banner.png"
+      aria-hidden="true"
+    >
+      <source src="/hero.mp4" type="video/mp4" />
+      <img src="/bg_banner.png" alt="" class="absolute inset-0 w-full h-full object-cover" width="1920" height="1080" />
+    </video>
+
+    <!-- Overlays para legibilidade do texto sobre o vídeo -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#1A140C]/55 via-[#1A140C]/30 to-[#1A140C]/85"></div>
+    <div class="absolute inset-0 bg-gradient-to-tr from-[#C9A961]/8 via-transparent to-[#F4E4C1]/10"></div>
+
+    <!-- Floating particles & decor -->
+    <div class="orb floaty-slow" style="width: 480px; height: 480px; top: -100px; left: -120px; background: radial-gradient(circle, rgba(244, 228, 193, 0.35), transparent 70%);" data-parallax="0.04"></div>
+    <div class="orb floaty" style="width: 380px; height: 380px; bottom: -80px; right: -80px; background: radial-gradient(circle, rgba(201, 169, 97, 0.4), transparent 70%);" data-parallax="-0.05"></div>
+
+    <div class="absolute top-[18%] left-[6%] opacity-50 floaty hidden sm:block">
+      <Decor variant="gold-flourish" class="w-16 h-16 sm:w-20 sm:h-20" />
+    </div>
+    <div class="absolute top-[24%] right-[6%] opacity-60 floaty-rev hidden sm:block" style="animation-delay: -4s;">
+      <Decor variant="almond" class="h-14 w-8 sm:h-20 sm:w-12" />
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       MAIN — VSL at center-top + text below
+       ───────────────────────────────────────── -->
+  <div class="hero-shell relative z-10 mx-auto flex w-full max-w-[1100px] xl:max-w-[1240px] 2xl:max-w-[1400px] flex-1 flex-col items-center justify-center px-3.5 pb-6 pt-4 text-center sm:px-6 sm:pt-10 sm:pb-14 lg:px-10">
+
+    <!-- ───────── LOGO ───────── -->
+    <div class="hero-logo reveal w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[330px] xl:max-w-[360px] 2xl:max-w-[400px] flex justify-center overflow-hidden">
+      <img
+        src="/logo.png"
+        alt="Curso Express · Nail Designer 7D"
+        class="hero-logo__img w-full h-[4.5rem] sm:h-[5rem] xl:h-[5.5rem] 2xl:h-[6rem] object-cover object-center"
+        width="800"
+        height="220"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+
+    <!-- ───────── VSL FRAME ───────── -->
+    <div class="hero-video-frame relative -mt-1 sm:mt-0 w-full max-w-[540px] md:max-w-[540px] lg:max-w-[600px] xl:max-w-[680px] 2xl:max-w-[800px] reveal reveal-delay-1">
+      <!-- Halo glow sutil (decoração ambiental, não bloqueia clique) -->
+      <div class="absolute -inset-6 sm:-inset-10 rounded-full bg-gradient-to-tr from-[#F4E4C1]/25 via-[#E6CE94]/18 to-transparent blur-3xl pulse-glow pointer-events-none -z-10"></div>
+
+      <!-- Player com borda mínima de 1px -->
+      <div class="relative rounded-[14px] overflow-hidden shadow-[0_24px_70px_-22px_rgba(0,0,0,0.6)] ring-1 ring-[#E6CE94]/35">
+        <VslPlayer
+          videoId="SFsN3Fy3CJY"
+          title="Vídeo de apresentação · Nail Designer 7D"
+        />
+      </div>
+    </div>
+
+    <!-- ───────── TITLE ───────── -->
+    <h1 class="hero-title mt-7 max-w-[58ch] text-balance font-display text-[clamp(1.15rem,3vw,2.05rem)] font-normal leading-[1.12] tracking-normal text-[#FAF6EE] reveal reveal-delay-2 sm:mt-8">
+      O método mais simples para
+      <span class="font-semibold text-[#FAF6EE]">mulheres iniciantes</span>
+      começarem no
+      <span class="font-semibold text-[#FAF6EE]">mercado de unhas</span>
+      — mesmo sem experiência
+    </h1>
+
+    <!-- ───────── SUBTITLE ───────── -->
+    <div class="hero-subtitle mt-3.5 reveal reveal-delay-3 sm:mt-4">
+      <p class="text-[13px] sm:text-[14px] lg:text-[15px] text-[#F4E4C1]/80 leading-relaxed max-w-2xl mx-auto">
+        Descubra como aprender a técnica do Molde F1 de forma prática, rápida e segura para começar seus primeiros atendimentos mesmo saindo do zero.
+      </p>
+    </div>
+
+    <!-- ───────── CTA ───────── -->
+    <div class="hero-cta mt-6 reveal reveal-delay-4 sm:mt-7">
+      <a href="#oferta" class="btn-premium">
+        <span>Quero começar no mercado de unhas</span>
+        <svg viewBox="0 0 24 24" class="h-3 w-3 fill-none stroke-current" stroke-width="1.8" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+
+      <p class="mt-3.5 text-[11px] uppercase tracking-[0.22em] text-[#F4E4C1]/65 flex items-center justify-center gap-2">
+        <svg viewBox="0 0 24 24" class="h-3.5 w-3.5 fill-none stroke-current" stroke-width="1.4" aria-hidden="true">
+          <path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z" />
+        </svg>
+        +7 anos de mercado · Thuany Carvalho
+      </p>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SCROLL DOWN INDICATOR
+       ───────────────────────────────────────── -->
+  <a
+    href="#problema"
+    class="hero-scroll relative z-10 mx-auto mb-8 inline-flex flex-col items-center gap-2 text-[#F4E4C1]/75 transition-colors hover:text-[#F4E4C1] group sm:mb-10"
+    aria-label="Rolar para baixo"
+  >
+    <span class="text-[10px] uppercase tracking-[0.32em]">Scroll</span>
+    <span class="relative w-6 h-10 rounded-full border border-[#F4E4C1]/40 flex items-start justify-center pt-2 overflow-hidden">
+      <span class="w-0.5 h-2 bg-[#E6CE94] rounded-full scroll-dot"></span>
+    </span>
+  </a>
+</section>
+
+<style>
+  /* Logo: inverte o preto pra champanhe-creme para contrastar com o vídeo escuro */
+  .hero-logo__img {
+    filter:
+      brightness(0)
+      invert(0.96)
+      sepia(0.18)
+      saturate(1.6)
+      hue-rotate(-8deg)
+      drop-shadow(0 6px 22px rgba(244, 228, 193, 0.22));
+  }
+
+  @keyframes scrollDot {
+    0% { transform: translateY(-6px); opacity: 0; }
+    25% { opacity: 1; }
+    75% { opacity: 1; }
+    100% { transform: translateY(12px); opacity: 0; }
+  }
+  .scroll-dot {
+    animation: scrollDot 2.2s var(--ease-cinematic) infinite;
+  }
+
+  @media (max-width: 639px) {
+    .hero-section {
+      min-height: 0;
+    }
+
+    .hero-shell {
+      flex: 0 1 auto;
+      justify-content: flex-start;
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-bottom: 12px;
+      gap: 0;
+    }
+
+    .hero-video-frame {
+      max-width: 100%;
+      margin-top: 0;
+    }
+
+    .hero-title {
+      max-width: 100%;
+      margin-top: 1.4rem;
+      font-size: clamp(1.6rem, 7.4vw, 2.05rem);
+      line-height: 1.1;
+    }
+
+    .hero-subtitle {
+      width: 100%;
+    }
+
+    .hero-subtitle p {
+      max-width: 100%;
+      font-size: 14.5px;
+      line-height: 1.55;
+    }
+
+    .hero-cta {
+      width: 100%;
+    }
+
+    .hero-scroll {
+      margin-bottom: max(18px, env(safe-area-inset-bottom));
+    }
+  }
+
+  /* Telas bem pequenas: aí sim começa a diminuir as letras */
+  @media (max-width: 374px) {
+    .hero-title {
+      font-size: 1.45rem;
+    }
+    .hero-subtitle p {
+      font-size: 13.5px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-dot { animation: none; opacity: 0.8; }
+  }
+</style>

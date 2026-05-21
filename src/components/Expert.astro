@@ -1,0 +1,135 @@
+---
+import Decor from "./Decor.astro";
+---
+
+<section id="expert" class="relative isolate overflow-hidden py-28 lg:py-40 bg-[#FAF6EE]">
+  <!-- Cinematic backdrop -->
+  <div class="absolute inset-0 -z-10 pointer-events-none">
+    <div class="orb orb-gold" style="width: 600px; height: 600px; top: 10%; left: -150px; opacity: 0.45;" data-parallax="0.05"></div>
+    <div class="orb orb-champagne" style="width: 480px; height: 480px; bottom: -80px; right: -80px;" data-parallax="-0.04"></div>
+
+    <!-- Editorial subtle grid -->
+    <div class="absolute inset-0 opacity-[0.04]"
+      style="background-image: linear-gradient(to right, #5C4A30 1px, transparent 1px), linear-gradient(to bottom, #5C4A30 1px, transparent 1px); background-size: 120px 120px;"></div>
+  </div>
+
+  <div class="mx-auto max-w-[1280px] px-6 lg:px-10">
+    <div class="grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-center">
+      <!-- LEFT — Expert photo (recortada, solta, com glow) -->
+      <div class="relative reveal reveal-slow">
+        <!-- Outer halo / glow -->
+        <div class="absolute -inset-6 lg:-inset-10 -z-10">
+          <div class="absolute inset-0 rounded-full bg-gradient-to-tr from-[#F4E4C1]/70 via-[#E6CE94]/40 to-transparent blur-3xl pulse-glow"></div>
+        </div>
+
+        <!-- Editorial frame number -->
+        <div class="absolute -top-4 -left-1 sm:-top-6 sm:-left-2 lg:-top-10 lg:-left-6 z-20">
+          <p class="font-display leading-none text-[#E6CE94]/45 tabular-nums text-[clamp(3.5rem,12vw,8.75rem)]">01</p>
+        </div>
+
+        <!-- Floating decorations around expert -->
+        <div class="absolute top-10 right-0 lg:right-2 z-20 floaty">
+          <Decor variant="gold-flourish" class="w-16 h-16 opacity-60" />
+        </div>
+        <div class="absolute bottom-6 left-4 z-20 floaty-rev opacity-80">
+          <Decor variant="almond" class="h-20 w-12" />
+        </div>
+        <div class="absolute top-1/3 -right-4 floaty z-20" style="animation-delay: -3s;">
+          <Decor variant="pearl" class="w-5 h-5" />
+        </div>
+        <div class="absolute bottom-1/3 -left-2 floaty-rev z-20" style="animation-delay: -5s;">
+          <Decor variant="chrome-dot" class="w-4 h-4" />
+        </div>
+
+        <!-- Foto real da expert · PNG recortada -->
+        <div class="relative floaty-slow z-10">
+          <!-- Sombra "flutuante" embaixo -->
+          <div class="absolute -bottom-6 left-1/2 -translate-x-1/2 w-3/4 h-10 bg-[#8B6F47]/30 rounded-full blur-2xl -z-10"></div>
+
+          <div class="relative max-w-[460px] mx-auto">
+            <img
+              src="/expert_bloco.png"
+              alt="Thuany Carvalho — mentora do Nail Designer 7D"
+              class="relative z-10 w-full h-auto object-contain drop-shadow-[0_30px_60px_rgba(26,20,12,0.32)]"
+              width="600"
+              height="800"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <!-- Signature -->
+        <div class="mt-4 text-center reveal reveal-delay-3">
+          <p class="font-script text-[#8B6F47] leading-none text-[clamp(2rem,8vw,2.75rem)]">Thuany Carvalho</p>
+          <p class="eyebrow mt-2 text-[#8B6F47]/80">Nail designer · Mentora</p>
+        </div>
+      </div>
+
+      <!-- RIGHT — Editorial story -->
+      <div class="relative">
+        <p class="micro-label reveal text-[#A88842]">Sua mentora</p>
+
+        <h2 class="headline-lg mt-4 reveal reveal-delay-1 text-[#2A2118]">
+          Quem será sua
+          <span class="italic font-light text-[#8B6F47]">mentora?</span>
+        </h2>
+
+        <div class="mt-8 space-y-5 text-[#4A3D2C] text-[15px] sm:text-[16px] lg:text-[17px] leading-[1.8] reveal reveal-delay-2">
+          <p class="font-display text-[#2A2118] italic text-[clamp(1.25rem,4vw,1.5rem)]">
+            Prazer, eu sou a Thuany Carvalho.
+          </p>
+
+          <p>
+            Estou há mais de <span class="text-[#8B6F47] font-medium">7 anos</span> no mercado Nail Designer e hoje ajudo mulheres a começarem no universo das unhas.
+          </p>
+
+          <p>Mas a verdade é que eu comecei exatamente do zero.</p>
+
+          <p>
+            Em 2017, saí de São Gonçalo em busca de uma vida melhor e comecei construindo minha trajetória atendendo clientes e me aperfeiçoando todos os dias dentro da profissão.
+          </p>
+
+          <p>
+            Com o tempo, comecei a conquistar minhas clientes, me tornar referência na minha região e ministrar diversos cursos presenciais.
+          </p>
+
+          <div class="my-6 gold-line w-full"></div>
+
+          <p>
+            Ao longo da minha caminhada, busquei especializações, fiz cursos nacionais e internacionais, incluindo formações com profissionais estrangeiras, para aperfeiçoar ainda mais meu trabalho.
+          </p>
+
+          <p class="font-display text-[#8B6F47] italic text-[clamp(1.15rem,3.6vw,1.375rem)]">
+            E foi assim que nasceu o Nail Designer 7D.
+          </p>
+
+          <p>
+            Agora, além dos cursos presenciais, minha missão é alcançar mulheres de todo o Brasil e mostrar que elas também conseguem começar, mesmo sem experiência, sem "dom" e sem saber por onde iniciar.
+          </p>
+        </div>
+
+        <!-- Stats / credentials cards -->
+        <div class="mt-10 grid grid-cols-3 gap-3 reveal reveal-delay-3">
+          {[
+            { n: "+7", l: "Anos de mercado" },
+            { n: "BR/INT", l: "Formações" },
+            { n: "100s", l: "Alunas formadas" },
+          ].map((s) => (
+            <div class="glass rounded-2xl p-3 sm:p-4 text-center transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-soft)]">
+              <p class="font-display text-transparent bg-clip-text bg-gradient-to-b from-[#C9A961] to-[#8B6F47] leading-none text-[clamp(1.25rem,4.5vw,1.875rem)]">{s.n}</p>
+              <p class="mt-1.5 text-[9px] sm:text-[10px] uppercase tracking-[0.18em] text-[#5C4A30]">{s.l}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- Closing quote -->
+        <div class="mt-10 pl-4 sm:pl-5 border-l-2 border-[#C9A961] reveal reveal-delay-4">
+          <p class="font-display italic text-[#2A2118] leading-snug text-[clamp(1rem,3.2vw,1.25rem)]">
+            Hoje, eu uno anos de experiência prática, especializações nacionais e internacionais e um método pensado especialmente para facilitar o aprendizado de mulheres iniciantes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

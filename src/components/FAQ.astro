@@ -1,0 +1,103 @@
+---
+import Decor from "./Decor.astro";
+
+const faqs = [
+  {
+    q: "Como vou acessar o curso?",
+    a: `Assim que sua inscrição for confirmada, você receberá o acesso imediato à plataforma onde as aulas ficam disponíveis.
+
+Você poderá assistir pelo:
+• Celular
+• Tablet
+• Computador`,
+  },
+  {
+    q: "Por quanto tempo terei acesso?",
+    a: "Você terá acesso ao curso por 1 ano (365 dias).",
+  },
+  {
+    q: "O pagamento é seguro?",
+    a: "Sim. O pagamento é realizado por uma plataforma 100% segura e seus dados ficam protegidos.",
+  },
+  {
+    q: "Quais formas de pagamento são aceitas?",
+    a: `Você poderá pagar via:
+• Cartão de crédito
+• Pix
+• Boleto bancário
+• e mais`,
+  },
+  {
+    q: "As aulas são gravadas ou ao vivo?",
+    a: "Todas as aulas são gravadas para que você possa assistir no seu ritmo e quantas vezes quiser durante o período de acesso.",
+  },
+  {
+    q: "O curso tem garantia?",
+    a: "Sim. Você terá garantia de 7 dias. Se dentro desse período você entender que o curso não é para você, poderá solicitar o reembolso.",
+  },
+  {
+    q: "Preciso ter experiência para começar?",
+    a: "Não. O Nail Designer 7D foi criado exatamente para iniciantes, mesmo para quem nunca fez unha antes.",
+  },
+  {
+    q: "Terei suporte caso tenha dúvidas?",
+    a: "Sim. Você poderá tirar dúvidas durante seu aprendizado na plataforma onde está o conteúdo do curso.",
+  },
+  {
+    q: "Quando posso começar?",
+    a: "Imediatamente após a confirmação do seu pagamento.",
+  },
+];
+---
+
+<section id="faq" class="relative isolate overflow-hidden py-28 lg:py-40 bg-[#FAF6EE]">
+  <div class="absolute inset-0 -z-10 pointer-events-none">
+    <div class="orb orb-nude" style="width: 460px; height: 460px; top: 10%; left: -120px;" data-parallax="0.04"></div>
+    <div class="orb orb-champagne" style="width: 380px; height: 380px; bottom: 0; right: -100px;" data-parallax="-0.04"></div>
+  </div>
+
+  <div class="mx-auto max-w-[1180px] px-6 lg:px-10">
+    <!-- Header -->
+    <div class="text-center mb-16 lg:mb-20">
+      <p class="micro-label reveal text-[#A88842]">Tudo o que você quer saber</p>
+      <h2 class="headline-lg mt-4 reveal reveal-delay-1 text-[#2A2118]">
+        <span class="italic font-light text-[#8B6F47]">Perguntas</span>
+        que toda iniciante faz
+      </h2>
+      <div class="mt-8 flex justify-center reveal reveal-delay-2">
+        <Decor variant="nail-arc" class="w-72 h-10 opacity-70" />
+      </div>
+    </div>
+
+    <!-- Two columns of accordion -->
+    <div class="grid lg:grid-cols-2 gap-4 lg:gap-6 max-w-[1080px] mx-auto">
+      {faqs.map((f, i) => (
+        <details
+          data-faq
+          class={`reveal reveal-delay-${(i % 4) + 1} group glass rounded-[20px] overflow-hidden transition-all duration-500 hover:shadow-[var(--shadow-soft)] [&[open]]:shadow-[var(--shadow-soft)]`}
+        >
+          <summary class="flex items-start justify-between gap-4 sm:gap-6 px-5 py-5 sm:px-6 sm:py-5 lg:px-8 lg:py-6 cursor-pointer select-none">
+            <span class="flex items-start gap-3 sm:gap-4 min-w-0">
+              <span class="font-display text-[16px] sm:text-[20px] text-[#C9A961] tabular-nums shrink-0 mt-0.5">{String(i + 1).padStart(2, "0")}</span>
+              <span class="font-display text-[#2A2118] leading-snug text-[clamp(1rem,3.4vw,1.25rem)]">{f.q}</span>
+            </span>
+            <span class="faq-icon shrink-0 mt-1.5 w-7 h-7 sm:w-8 sm:h-8 rounded-full glass flex items-center justify-center">
+              <svg viewBox="0 0 24 24" class="h-3 w-3 sm:h-3.5 sm:w-3.5 fill-none stroke-[#8B6F47]" stroke-width="1.5" aria-hidden="true">
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+            </span>
+          </summary>
+          <div class="faq-content">
+            <div>
+              <div class="px-5 sm:px-6 lg:px-8 pb-5 sm:pb-6 lg:pb-7 pl-[3.25rem] sm:pl-[3.75rem] lg:pl-[4.25rem] text-[14px] sm:text-[14.5px] lg:text-[15px] text-[#4A3D2C] leading-[1.8]">
+                <div class="pt-1 border-t border-[#C9A961]/15">
+                  <p class="mt-4 whitespace-pre-line">{f.a}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>

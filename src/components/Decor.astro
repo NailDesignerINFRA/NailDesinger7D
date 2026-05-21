@@ -1,0 +1,263 @@
+---
+// Decorative SVG primitives inspired by the nail design universe.
+// Pure SVG, no JS, transform/opacity-only animations via CSS classes.
+
+interface Props {
+  variant:
+    | "almond"
+    | "almond-outline"
+    | "brush"
+    | "particle-cluster"
+    | "nail-arc"
+    | "gold-flourish"
+    | "pearl"
+    | "chrome-dot"
+    | "wave-divider"
+    | "molde-f1"
+    | "dotting-tool"
+    | "nail-file"
+    | "polish-bottle"
+    | "cuticle-pusher";
+  class?: string;
+}
+
+const { variant, class: className = "" } = Astro.props;
+---
+
+{variant === "almond" && (
+  <svg viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="almondG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#F9EFD9" />
+        <stop offset="55%" stop-color="#E6CE94" />
+        <stop offset="100%" stop-color="#C9A961" />
+      </linearGradient>
+      <linearGradient id="almondShine" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#FFFEFB" stop-opacity="0" />
+        <stop offset="50%" stop-color="#FFFEFB" stop-opacity="0.85" />
+        <stop offset="100%" stop-color="#FFFEFB" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M40 4 C 62 28, 72 70, 40 136 C 8 70, 18 28, 40 4 Z" fill="url(#almondG)" />
+    <path d="M40 8 C 36 22, 34 42, 36 70" stroke="url(#almondShine)" stroke-width="6" stroke-linecap="round" opacity="0.6"/>
+  </svg>
+)}
+
+{variant === "almond-outline" && (
+  <svg viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <path d="M40 4 C 62 28, 72 70, 40 136 C 8 70, 18 28, 40 4 Z" stroke="#C9A961" stroke-width="0.8" opacity="0.55" />
+  </svg>
+)}
+
+{variant === "brush" && (
+  <svg viewBox="0 0 240 24" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="brushG" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#C9A961" stop-opacity="0" />
+        <stop offset="50%" stop-color="#C9A961" stop-opacity="1" />
+        <stop offset="100%" stop-color="#C9A961" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0 12 Q 60 4, 120 12 T 240 12" stroke="url(#brushG)" stroke-width="0.7" fill="none" />
+    <path d="M0 14 Q 60 18, 120 14 T 240 14" stroke="url(#brushG)" stroke-width="0.4" fill="none" opacity="0.5" />
+  </svg>
+)}
+
+{variant === "particle-cluster" && (
+  <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <g fill="#E6CE94">
+      <circle cx="20" cy="40" r="1.2" opacity="0.7" />
+      <circle cx="60" cy="22" r="0.8" opacity="0.5" />
+      <circle cx="90" cy="68" r="1.6" opacity="0.85" />
+      <circle cx="140" cy="30" r="1" opacity="0.6" />
+      <circle cx="170" cy="80" r="1.3" opacity="0.7" />
+      <circle cx="50" cy="120" r="0.9" opacity="0.5" />
+      <circle cx="110" cy="150" r="1.4" opacity="0.7" />
+      <circle cx="160" cy="170" r="0.8" opacity="0.4" />
+      <circle cx="30" cy="180" r="1.1" opacity="0.6" />
+      <circle cx="180" cy="120" r="0.7" opacity="0.45" />
+    </g>
+  </svg>
+)}
+
+{variant === "nail-arc" && (
+  <svg viewBox="0 0 400 80" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="arcG" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#C9A961" stop-opacity="0" />
+        <stop offset="50%" stop-color="#C9A961" stop-opacity="0.85" />
+        <stop offset="100%" stop-color="#C9A961" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path d="M0 40 Q 200 -20, 400 40" stroke="url(#arcG)" stroke-width="0.7" fill="none" />
+    <path d="M0 40 Q 200 80, 400 40" stroke="url(#arcG)" stroke-width="0.4" fill="none" opacity="0.5" />
+  </svg>
+)}
+
+{variant === "gold-flourish" && (
+  <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="florG" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#E6CE94" />
+        <stop offset="100%" stop-color="#A88842" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M60 4 C 80 20, 100 36, 110 60 C 100 84, 80 100, 60 116 C 40 100, 20 84, 10 60 C 20 36, 40 20, 60 4 Z"
+      stroke="url(#florG)" stroke-width="0.6" fill="none" opacity="0.55"
+    />
+    <path
+      d="M60 16 C 75 30, 88 42, 96 60 C 88 78, 75 90, 60 104 C 45 90, 32 78, 24 60 C 32 42, 45 30, 60 16 Z"
+      stroke="url(#florG)" stroke-width="0.4" fill="none" opacity="0.4"
+    />
+    <circle cx="60" cy="60" r="2" fill="#E6CE94" />
+  </svg>
+)}
+
+{variant === "pearl" && (
+  <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <radialGradient id="pearlG" cx="0.35" cy="0.3" r="0.7">
+        <stop offset="0%" stop-color="#FFFEFB" />
+        <stop offset="45%" stop-color="#F4E4C1" />
+        <stop offset="100%" stop-color="#C9A961" />
+      </radialGradient>
+    </defs>
+    <circle cx="20" cy="20" r="18" fill="url(#pearlG)" />
+    <ellipse cx="14" cy="13" rx="5" ry="3" fill="#FFFEFB" opacity="0.6" />
+  </svg>
+)}
+
+{variant === "chrome-dot" && (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <radialGradient id="chromeG" cx="0.3" cy="0.3" r="0.8">
+        <stop offset="0%" stop-color="#FFFEFB" />
+        <stop offset="40%" stop-color="#E6CE94" />
+        <stop offset="100%" stop-color="#8B6F47" />
+      </radialGradient>
+    </defs>
+    <circle cx="12" cy="12" r="10" fill="url(#chromeG)" />
+  </svg>
+)}
+
+{variant === "wave-divider" && (
+  <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <linearGradient id="waveG" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#C9A961" stop-opacity="0" />
+        <stop offset="50%" stop-color="#C9A961" stop-opacity="0.5" />
+        <stop offset="100%" stop-color="#C9A961" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M0 40 C 240 20, 480 60, 720 40 S 1200 20, 1440 40"
+      stroke="url(#waveG)" stroke-width="1" fill="none"
+    />
+    <path
+      d="M0 50 C 240 30, 480 70, 720 50 S 1200 30, 1440 50"
+      stroke="url(#waveG)" stroke-width="0.5" fill="none" opacity="0.5"
+    />
+  </svg>
+)}
+
+{variant === "molde-f1" && (
+  <svg viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="moldeG" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#FFFEFB" stop-opacity="0.85" />
+        <stop offset="100%" stop-color="#E6CE94" stop-opacity="0.4" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M30 6 C 46 24, 52 52, 30 96 C 8 52, 14 24, 30 6 Z"
+      stroke="url(#moldeG)" stroke-width="0.5" fill="none"
+    />
+    <path
+      d="M30 12 C 42 28, 46 52, 30 88 C 14 52, 18 28, 30 12 Z"
+      stroke="url(#moldeG)" stroke-width="0.3" fill="none" opacity="0.7"
+    />
+    <line x1="30" y1="6" x2="30" y2="96" stroke="#C9A961" stroke-width="0.3" opacity="0.4" stroke-dasharray="2 4" />
+  </svg>
+)}
+
+{variant === "dotting-tool" && (
+  <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="dottingG" x1="22" y1="138" x2="118" y2="42" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#FFFEFB" />
+        <stop offset="0.45" stop-color="#E6CE94" />
+        <stop offset="1" stop-color="#8B6F47" />
+      </linearGradient>
+      <radialGradient id="dottingBall" cx="0.35" cy="0.3" r="0.75">
+        <stop offset="0%" stop-color="#FFFEFB" />
+        <stop offset="50%" stop-color="#F4E4C1" />
+        <stop offset="100%" stop-color="#A88842" />
+      </radialGradient>
+    </defs>
+    <!-- Cabo da caneta -->
+    <path d="M22 138 L118 42" stroke="url(#dottingG)" stroke-width="11" stroke-linecap="round" />
+    <!-- Aro metálico antes da ponta -->
+    <path d="M104 56 L122 38" stroke="#5C4A30" stroke-width="11" stroke-linecap="round" opacity="0.55" />
+    <!-- Esfera dourada (ponta de pontilhar) -->
+    <circle cx="128" cy="32" r="13" fill="url(#dottingBall)" />
+    <!-- Brilho -->
+    <circle cx="124" cy="28" r="3.5" fill="#FFFEFB" opacity="0.75" />
+    <!-- Pingo recém-pontilhado -->
+    <circle cx="144" cy="16" r="3" fill="#C9A961" opacity="0.7" />
+  </svg>
+)}
+
+{variant === "cuticle-pusher" && (
+  <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="pusherG" x1="20" y1="140" x2="130" y2="30" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#F9EFD9" />
+        <stop offset="0.5" stop-color="#C9A961" />
+        <stop offset="1" stop-color="#5C4A30" />
+      </linearGradient>
+    </defs>
+    <!-- Cabo -->
+    <path d="M28 134 L100 62" stroke="url(#pusherG)" stroke-width="9" stroke-linecap="round" />
+    <!-- Lâmina/espátula -->
+    <path d="M100 62 L130 40 L138 48 L108 70 Z" fill="url(#pusherG)" />
+    <!-- Brilho metálico -->
+    <path d="M104 58 L130 36" stroke="#FFFEFB" stroke-width="1.5" opacity="0.6" />
+  </svg>
+)}
+
+{variant === "nail-file" && (
+  <svg viewBox="0 0 190 70" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="fileG" x1="8" y1="35" x2="182" y2="35" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#F1E2D2" />
+        <stop offset="0.5" stop-color="#E6CE94" />
+        <stop offset="1" stop-color="#A88842" />
+      </linearGradient>
+    </defs>
+    <path d="M24 18 H166 C176 18 184 26 184 35 C184 44 176 52 166 52 H24 C14 52 6 44 6 35 C6 26 14 18 24 18 Z" fill="url(#fileG)" opacity="0.95" />
+    <path d="M24 26 H166" stroke="#FFFEFB" stroke-width="1" opacity="0.45" />
+    <path d="M24 35 H166" stroke="#8B6F47" stroke-width="0.8" opacity="0.2" />
+    <path d="M24 44 H166" stroke="#FFFEFB" stroke-width="1" opacity="0.35" />
+  </svg>
+)}
+
+{variant === "polish-bottle" && (
+  <svg viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true">
+    <defs>
+      <linearGradient id="polishG" x1="28" y1="60" x2="94" y2="145" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#F9EFD9" />
+        <stop offset="0.55" stop-color="#C9A961" />
+        <stop offset="1" stop-color="#5C4A30" />
+      </linearGradient>
+      <linearGradient id="capG" x1="44" y1="10" x2="76" y2="58" gradientUnits="userSpaceOnUse">
+        <stop stop-color="#2A2118" />
+        <stop offset="1" stop-color="#8B6F47" />
+      </linearGradient>
+    </defs>
+    <rect x="44" y="12" width="32" height="52" rx="8" fill="url(#capG)" />
+    <path d="M36 58 H84 L98 84 V136 C98 144 92 150 84 150 H36 C28 150 22 144 22 136 V84 L36 58 Z" fill="url(#polishG)" />
+    <path d="M40 68 H80 L88 86 V130 C88 136 84 140 78 140 H42 C36 140 32 136 32 130 V86 L40 68 Z" stroke="#FFFEFB" stroke-width="1.2" opacity="0.45" />
+    <path d="M44 80 C52 74 64 74 76 80" stroke="#FFFEFB" stroke-width="4" stroke-linecap="round" opacity="0.42" />
+  </svg>
+)}

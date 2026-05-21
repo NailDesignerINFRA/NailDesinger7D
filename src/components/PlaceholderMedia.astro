@@ -1,0 +1,69 @@
+---
+interface Props {
+  type: "video" | "image" | "expert" | "testimonial";
+  label?: string;
+  ratio?: "16/9" | "9/16" | "1/1" | "4/5" | "3/4";
+  class?: string;
+}
+
+const {
+  type,
+  label,
+  ratio = "16/9",
+  class: className = "",
+} = Astro.props;
+
+const defaultLabel = {
+  video: "VSL — Inserir vídeo cinematográfico",
+  image: "Imagem premium do Molde F1",
+  expert: "Foto recortada da Thuany Carvalho",
+  testimonial: "Vídeo vertical da aluna",
+}[type];
+
+const finalLabel = label ?? defaultLabel;
+---
+
+<div
+  class={`placeholder-media rounded-[22px] ${className}`}
+  style={`aspect-ratio: ${ratio};`}
+  role="img"
+  aria-label={finalLabel}
+>
+  <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
+    {type === "video" && (
+      <div class="relative">
+        <div class="absolute inset-0 rounded-full bg-[#C9A961]/30 blur-2xl pulse-glow"></div>
+        <div class="relative h-16 w-16 rounded-full glass flex items-center justify-center border border-[#C9A961]/40">
+          <svg viewBox="0 0 24 24" class="h-6 w-6 fill-[#5C4A30]" aria-hidden="true">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+      </div>
+    )}
+    {type === "image" && (
+      <svg viewBox="0 0 24 24" class="h-10 w-10 fill-none stroke-[#8B6F47]/60" stroke-width="1" aria-hidden="true">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <circle cx="9" cy="9" r="2" />
+        <path d="M3 17l5-5 4 4 3-3 6 6" />
+      </svg>
+    )}
+    {type === "expert" && (
+      <svg viewBox="0 0 24 24" class="h-10 w-10 fill-none stroke-[#8B6F47]/60" stroke-width="1" aria-hidden="true">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c0-4 4-7 8-7s8 3 8 7" />
+      </svg>
+    )}
+    {type === "testimonial" && (
+      <div class="relative">
+        <div class="h-12 w-12 rounded-full glass flex items-center justify-center border border-[#C9A961]/40">
+          <svg viewBox="0 0 24 24" class="h-4 w-4 fill-[#5C4A30]" aria-hidden="true">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+      </div>
+    )}
+    <p class="eyebrow !text-[10px] !tracking-[0.28em] text-[#8B6F47]/80 max-w-[80%]">
+      {finalLabel}
+    </p>
+  </div>
+</div>

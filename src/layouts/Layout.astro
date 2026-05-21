@@ -1,0 +1,187 @@
+---
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Nail Designer 7D — O método mais simples para iniciantes começarem no mercado de unhas",
+  description = "Aprenda a técnica do Molde F1 em até 7 dias e dê seus primeiros passos no mercado Nail Designer — mesmo sem experiência.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#FAF6EE" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+
+    <!-- Performance — preconnects e fontes com swap pra evitar FOIT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
+    <link rel="dns-prefetch" href="https://i.ytimg.com" />
+
+    <!-- Assets críticos acima da dobra -->
+    <link rel="preload" as="image" href="/logo.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/bg_banner.png" fetchpriority="high" />
+
+    <!-- Fontes: peso reduzido — só os que usamos -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=Italianno&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=Italianno&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=Italianno&display=swap"
+      />
+    </noscript>
+
+    <link rel="canonical" href={Astro.url.href} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+    <link rel="shortcut icon" href="/favicon.png" />
+
+    <!-- Critical inline styles for instant paint -->
+    <style is:inline>
+      html, body { background: #FAF6EE; }
+      .noscript-fallback .reveal { opacity: 1 !important; transform: none !important; }
+    </style>
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": "Nail Designer 7D",
+      "description": description,
+      "provider": {
+        "@type": "Person",
+        "name": "Thuany Carvalho"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "197.00",
+        "priceCurrency": "BRL"
+      }
+    })} />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Pular para conteúdo principal</a>
+    <noscript>
+      <style>.reveal { opacity: 1 !important; transform: none !important; }</style>
+    </noscript>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <!-- Sticky CTA mobile — aparece após scroll do hero, some no checkout -->
+    <aside id="stickyCta" class="sticky-cta" aria-hidden="true">
+      <div class="sticky-cta__price">
+        <span class="from">12x</span>
+        <span class="amount">R$ <strong>23,68</strong> <span class="text-[10px] uppercase tracking-[0.18em] text-[#F4E4C1]/55 ml-1">ou R$ 197 à vista</span></span>
+      </div>
+      <a
+        href="https://pay.hotmart.com/N95036193B?checkoutMode=10"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Ir para o checkout seguro"
+      >
+        Quero entrar
+        <svg viewBox="0 0 24 24" class="h-3 w-3 fill-none stroke-current" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </aside>
+
+    <!-- Animation engine — IO nativo (sem libs externas, bundle mínimo) -->
+    <script>
+      // Reveal on intersection — IntersectionObserver nativo, ~0 kb extra
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15 }
+      );
+      document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => revealObserver.observe(el));
+
+      // Parallax orbs (subtle, transform only)
+      const orbs = document.querySelectorAll<HTMLElement>("[data-parallax]");
+      if (orbs.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        let ticking = false;
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            const y = window.scrollY;
+            orbs.forEach((orb) => {
+              const speed = parseFloat(orb.dataset.parallax || "0.08");
+              orb.style.transform = `translate3d(0, ${y * speed}px, 0)`;
+            });
+            ticking = false;
+          });
+        };
+        window.addEventListener("scroll", onScroll, { passive: true });
+      }
+
+      // Sticky CTA mobile — show after hero, hide near offer
+      const stickyCta = document.getElementById("stickyCta");
+      const heroSection = document.querySelector<HTMLElement>(".hero-section");
+      const offerSection = document.getElementById("oferta");
+      if (stickyCta && heroSection) {
+        const updateSticky = () => {
+          const heroBottom = heroSection.getBoundingClientRect().bottom;
+          const offerRect = offerSection?.getBoundingClientRect();
+          const nearOffer = offerRect ? offerRect.top < window.innerHeight * 0.85 && offerRect.bottom > 0 : false;
+          const shouldShow = heroBottom < 0 && !nearOffer;
+          stickyCta.classList.toggle("is-visible", shouldShow);
+          stickyCta.setAttribute("aria-hidden", String(!shouldShow));
+        };
+        updateSticky();
+        window.addEventListener("scroll", updateSticky, { passive: true });
+        window.addEventListener("resize", updateSticky);
+      }
+
+      // Auto-scroll testimonial carousel (pauses on hover/touch)
+      const carousel = document.querySelector<HTMLElement>("[data-carousel]");
+      if (carousel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        let paused = false;
+        let direction = 1;
+        carousel.addEventListener("mouseenter", () => (paused = true));
+        carousel.addEventListener("mouseleave", () => (paused = false));
+        carousel.addEventListener("touchstart", () => (paused = true), { passive: true });
+        setInterval(() => {
+          if (paused) return;
+          const max = carousel.scrollWidth - carousel.clientWidth;
+          if (carousel.scrollLeft >= max - 4) direction = -1;
+          else if (carousel.scrollLeft <= 4) direction = 1;
+          carousel.scrollBy({ left: direction * 320, behavior: "smooth" });
+        }, 5000);
+      }
+    </script>
+  </body>
+</html>

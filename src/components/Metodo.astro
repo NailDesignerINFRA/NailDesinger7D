@@ -1,0 +1,471 @@
+---
+import Decor from "./Decor.astro";
+
+type Card = {
+  variant: "feature" | "hero" | "closer";
+  title: string;
+  desc?: string;
+  icon?:
+    | "almond"
+    | "molde-f1"
+    | "polish-bottle"
+    | "nail-file"
+    | "dotting-tool"
+    | "cuticle-pusher"
+    | "pearl";
+};
+
+const cards: Card[] = [
+  {
+    variant: "hero",
+    title: "Molde F1",
+    desc: "A técnica que se tornou a porta de entrada mais inteligente no mercado.",
+    icon: "molde-f1",
+  },
+  {
+    variant: "feature",
+    title: "Aplicações mais rápidas",
+    desc: "Atendimento ágil, sem perder qualidade nem natural.",
+    icon: "almond",
+  },
+  {
+    variant: "feature",
+    title: "Acabamento natural",
+    desc: "Resultado leve, elegante e fácil de manter.",
+    icon: "pearl",
+  },
+  {
+    variant: "feature",
+    title: "Menos desperdício de produto",
+    desc: "Compre o essencial e aproveite cada gota.",
+    icon: "polish-bottle",
+  },
+  {
+    variant: "feature",
+    title: "Mais facilidade para iniciantes",
+    desc: "Passo a passo pensado pra quem está começando do zero.",
+    icon: "dotting-tool",
+  },
+  {
+    variant: "feature",
+    title: "Baixo custo para começar",
+    desc: "Sem investimento alto — só o essencial certo.",
+    icon: "cuticle-pusher",
+  },
+  {
+    variant: "feature",
+    title: "Mais segurança na aplicação",
+    desc: "Processo previsível, sem aquela sensação de “vai dar errado”.",
+    icon: "nail-file",
+  },
+  {
+    variant: "closer",
+    title: "Você aprende o caminho mais inteligente.",
+    desc: "Sem meses de tentativa e erro. Só o que realmente funciona pra começar a atender.",
+  },
+];
+---
+
+<section id="metodo" class="metodo-section relative isolate bg-[#1A140C]" data-metodo-section>
+  <!-- BG decor (overflow contido aqui, NÃO na section, senão quebra o sticky) -->
+  <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+    <div class="absolute inset-0 bg-gradient-to-br from-[#1A140C] via-[#241B12] to-[#0F0B07]"></div>
+    <div class="absolute inset-0 opacity-[0.05]"
+      style="background-image: radial-gradient(circle at 1px 1px, #F4E4C1 1px, transparent 0); background-size: 32px 32px;"></div>
+    <div class="orb floaty-slow" style="width: 520px; height: 520px; top: 6%; left: -160px; background: radial-gradient(circle, rgba(201,169,97,0.32), transparent 70%);" data-parallax="0.05"></div>
+    <div class="orb floaty" style="width: 460px; height: 460px; bottom: 8%; right: -140px; background: radial-gradient(circle, rgba(244,228,193,0.22), transparent 70%);" data-parallax="-0.04"></div>
+  </div>
+
+  <!-- ───────── Sticky stage (desktop horizontal scroll) ───────── -->
+  <div class="metodo-stage">
+    <div class="metodo-stage__inner">
+      <!-- Header -->
+      <header class="metodo-header text-center mx-auto max-w-[640px] px-6">
+        <p class="micro-label text-[#E6CE94]">O método</p>
+        <h2 class="headline-lg mt-5 text-[#FAF6EE]">
+          O que é o <span class="italic font-light text-[#E6CE94]">Nail Designer 7D</span>?
+        </h2>
+        <p class="mt-5 text-[14px] sm:text-[15px] leading-relaxed text-[#F4E4C1]/75">
+          Um curso com passo a passo estratégico para acelerar o aprendizado de mulheres que querem entrar no mercado de unhas — sem técnicas demoradas, sem complicação.
+        </p>
+      </header>
+
+      <!-- Track -->
+      <div class="metodo-track" data-metodo-track>
+        <div class="metodo-track__inner" data-metodo-track-inner>
+          {cards.map((c, i) => (
+            <article class={`metodo-card metodo-card--${c.variant}`} data-card-index={i}>
+              {c.variant === "hero" && (
+                <>
+                  <div class="absolute -top-6 -right-6 opacity-25 spin-slow pointer-events-none">
+                    <Decor variant="gold-flourish" class="w-28 h-28" />
+                  </div>
+                  <div class="metodo-card__hero-mark">
+                    <span class="font-display leading-none text-transparent bg-clip-text bg-gradient-to-b from-[#F4E4C1] via-[#E6CE94] to-[#A88842] text-[clamp(5rem,15vw,8.5rem)]">F1</span>
+                  </div>
+                  <p class="eyebrow text-[#E6CE94]/90 mt-3">Técnica destaque</p>
+                  <h3 class="font-display italic text-[#FAF6EE] mt-2 text-[clamp(1.6rem,4.5vw,2.2rem)] leading-tight">{c.title}</h3>
+                  <p class="mt-3 text-[14px] leading-relaxed text-[#F4E4C1]/80 max-w-[28ch]">{c.desc}</p>
+                </>
+              )}
+
+              {c.variant === "feature" && (
+                <>
+                  <div class="metodo-card__index">{String(i).padStart(2, "0")}</div>
+                  {c.icon && (
+                    <div class="metodo-card__icon">
+                      <Decor variant={c.icon} class="w-full h-full" />
+                    </div>
+                  )}
+                  <h3 class="font-display text-[#FAF6EE] mt-1 text-[clamp(1.05rem,2.2vw,1.3rem)] leading-tight">{c.title}</h3>
+                  <p class="mt-2 text-[13.5px] leading-relaxed text-[#F4E4C1]/72">{c.desc}</p>
+                </>
+              )}
+
+              {c.variant === "closer" && (
+                <>
+                  <p class="eyebrow text-[#E6CE94]/85">Ou seja</p>
+                  <h3 class="font-display italic text-[#FAF6EE] mt-3 text-[clamp(1.4rem,3.5vw,1.85rem)] leading-tight">
+                    {c.title}
+                  </h3>
+                  <p class="mt-4 text-[14px] leading-relaxed text-[#F4E4C1]/78">{c.desc}</p>
+                  <a href="#oferta" class="mt-6 inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.22em] text-[#E6CE94] hover:text-[#FAF6EE] transition-colors">
+                    Quero esse caminho
+                    <svg viewBox="0 0 24 24" class="h-3 w-3 fill-none stroke-current" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                  </a>
+                </>
+              )}
+            </article>
+          ))}
+        </div>
+
+        <!-- Progress + scroll hint -->
+        <div class="metodo-track__progress" aria-hidden="true">
+          <span class="metodo-track__progress-fill" data-progress-fill></span>
+        </div>
+        <p class="metodo-track__hint">↓ role para avançar</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-metodo-section]');
+  const inner = document.querySelector<HTMLElement>('[data-metodo-track-inner]');
+  const fill = document.querySelector<HTMLElement>('[data-progress-fill]');
+
+  if (section && inner) {
+    const isDesktop = () => window.matchMedia('(min-width: 1024px)').matches;
+
+    // Calcula a altura ideal da seção: 1 viewport pro sticky + scroll necessário pra
+    // mover o track inteiro. Assim a seção TRAVA exatamente até o último card sair.
+    const recomputeHeight = () => {
+      if (!isDesktop()) {
+        section.style.minHeight = '';
+        return;
+      }
+      const trackParent = inner.parentElement as HTMLElement;
+      const maxTx = Math.max(0, inner.scrollWidth - trackParent.clientWidth);
+      // 1.0 viewport pra leitura inicial + distância de translação + 0.25 viewport
+      // de "respiro" no final pra usuário absorver o último card antes de soltar.
+      const targetHeight = window.innerHeight + maxTx + window.innerHeight * 0.25;
+      section.style.minHeight = `${targetHeight}px`;
+    };
+
+    const update = () => {
+      if (!isDesktop()) {
+        inner.style.transform = '';
+        if (fill) fill.style.transform = '';
+        return;
+      }
+      const rect = section.getBoundingClientRect();
+      const total = section.offsetHeight - window.innerHeight;
+      const scrolled = Math.max(0, -rect.top);
+      const progress = Math.min(1, Math.max(0, scrolled / Math.max(total, 1)));
+
+      const trackParent = inner.parentElement as HTMLElement;
+      const maxTx = Math.max(0, inner.scrollWidth - trackParent.clientWidth);
+      // Usa um "subprogress" que considera só a janela onde a translação acontece
+      // (descontando o respiro final), pra cards já terem chegado ao fim antes do
+      // sticky soltar.
+      const translateWindow = 1 - 0.25 / (1 + maxTx / window.innerHeight + 0.25);
+      const subProgress = Math.min(1, progress / Math.max(translateWindow, 0.01));
+      inner.style.transform = `translate3d(${-subProgress * maxTx}px, 0, 0)`;
+      if (fill) fill.style.transform = `scaleX(${subProgress})`;
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
+    };
+
+    // Quando fontes/imagens carregam, o scrollWidth do track muda. Reage.
+    const ro = 'ResizeObserver' in window ? new ResizeObserver(() => { recomputeHeight(); update(); }) : null;
+    if (ro) ro.observe(inner);
+
+    recomputeHeight();
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => { recomputeHeight(); update(); });
+    window.addEventListener('load', () => { recomputeHeight(); update(); });
+  }
+</script>
+
+<style>
+  /* ──────────────────────────────────────────────
+     SECTION GERAL
+  ────────────────────────────────────────────── */
+  .metodo-section {
+    /* Padding override do global aplicaria — neutralizamos via altura total */
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* ──────────────────────────────────────────────
+     DESKTOP (sticky horizontal scroll)
+     Fallback min-height: o JS recalcula com base na largura
+     real do track depois que o layout/fontes carregam.
+  ────────────────────────────────────────────── */
+  @media (min-width: 1024px) {
+    .metodo-section {
+      min-height: calc(100vh + 1400px);
+    }
+    .metodo-stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    .metodo-stage__inner {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 2.5rem;
+      width: 100%;
+      padding: 4rem 0 3rem;
+      max-height: 100vh;
+    }
+    .metodo-header {
+      max-width: 760px;
+      padding: 0 2.5rem;
+    }
+    .metodo-track {
+      position: relative;
+      overflow: hidden;
+      padding: 1rem 0;
+      mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+    }
+    .metodo-track__inner {
+      display: flex;
+      gap: 1.5rem;
+      width: max-content;
+      padding: 0 max(2.5rem, 8vw);
+      will-change: transform;
+    }
+    .metodo-card {
+      flex: 0 0 auto;
+      width: 300px;
+      min-height: 320px;
+    }
+    .metodo-card--hero {
+      width: 380px;
+      min-height: 360px;
+    }
+    .metodo-card--closer {
+      width: 360px;
+    }
+    .metodo-track__hint {
+      display: block;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .metodo-card {
+      width: 320px;
+      min-height: 340px;
+    }
+    .metodo-card--hero {
+      width: 420px;
+    }
+  }
+
+  /* ──────────────────────────────────────────────
+     MOBILE / TABLET (stack vertical)
+  ────────────────────────────────────────────── */
+  @media (max-width: 1023px) {
+    .metodo-stage {
+      padding: 4.5rem 1.5rem;
+    }
+    .metodo-stage__inner {
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+    }
+    .metodo-header {
+      padding: 0;
+    }
+    .metodo-track {
+      overflow: visible;
+    }
+    .metodo-track__inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.85rem;
+    }
+    .metodo-card {
+      width: 100%;
+      min-height: 0;
+    }
+    .metodo-track__progress,
+    .metodo-track__hint {
+      display: none;
+    }
+  }
+
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .metodo-track__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+    .metodo-card--hero,
+    .metodo-card--closer {
+      grid-column: span 2;
+    }
+  }
+
+  /* ──────────────────────────────────────────────
+     CARDS
+  ────────────────────────────────────────────── */
+  .metodo-card {
+    position: relative;
+    isolation: isolate;
+    padding: 1.75rem;
+    border-radius: 20px;
+    background:
+      radial-gradient(120% 90% at 0% 0%, rgba(230, 206, 148, 0.12), transparent 55%),
+      linear-gradient(150deg, rgba(255, 254, 251, 0.06), rgba(26, 20, 12, 0.4));
+    border: 1px solid rgba(230, 206, 148, 0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 20px 60px -32px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+    transition:
+      transform 500ms var(--ease-premium),
+      border-color 500ms var(--ease-premium),
+      box-shadow 500ms var(--ease-premium);
+  }
+
+  .metodo-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(230, 206, 148, 0.4);
+    box-shadow: 0 28px 70px -28px rgba(168, 136, 66, 0.45);
+  }
+
+  .metodo-card--hero {
+    background:
+      radial-gradient(110% 80% at 50% 0%, rgba(230, 206, 148, 0.22), transparent 55%),
+      linear-gradient(160deg, rgba(255, 254, 251, 0.08), rgba(26, 20, 12, 0.55));
+    border-color: rgba(230, 206, 148, 0.35);
+  }
+
+  .metodo-card--closer {
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgba(230, 206, 148, 0.18), transparent 55%),
+      linear-gradient(135deg, rgba(168, 136, 66, 0.18), rgba(26, 20, 12, 0.55));
+    border-color: rgba(230, 206, 148, 0.32);
+  }
+
+  .metodo-card__index {
+    font-family: var(--font-display);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: rgba(244, 228, 193, 0.55);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .metodo-card__icon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1rem;
+    padding: 0.45rem;
+    border-radius: 14px;
+    background: rgba(255, 254, 251, 0.04);
+    border: 1px solid rgba(230, 206, 148, 0.16);
+  }
+
+  .metodo-card__hero-mark {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    line-height: 1;
+    margin: 0.5rem 0 0.75rem;
+  }
+
+  /* ──────────────────────────────────────────────
+     PROGRESS BAR + SCROLL HINT
+  ────────────────────────────────────────────── */
+  .metodo-track__progress {
+    position: absolute;
+    bottom: -28px;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: rgba(230, 206, 148, 0.12);
+    border-radius: 999px;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .metodo-track__progress-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #C9A961, #F4E4C1, #A88842);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 120ms linear;
+  }
+  .metodo-track__hint {
+    position: absolute;
+    bottom: -62px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 10.5px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: rgba(244, 228, 193, 0.55);
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .metodo-section {
+      min-height: 0 !important;
+    }
+    .metodo-stage {
+      position: static;
+      height: auto;
+    }
+    .metodo-track {
+      overflow: visible;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+    .metodo-track__inner {
+      flex-wrap: wrap;
+      transform: none !important;
+      padding: 0 !important;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .metodo-card {
+      width: 320px;
+    }
+  }
+</style>
