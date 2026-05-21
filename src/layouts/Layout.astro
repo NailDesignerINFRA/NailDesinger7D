@@ -32,29 +32,31 @@ const {
     <!-- Performance — preconnects e fontes com swap pra evitar FOIT -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://www.youtube-nocookie.com" />
-    <link rel="dns-prefetch" href="https://i.ytimg.com" />
+    <!-- i.ytimg: usado imediatamente para o poster do VSL (facade) -->
+    <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
+    <!-- youtube-nocookie: só conecta quando o usuário clica no poster -->
+    <link rel="dns-prefetch" href="https://www.youtube-nocookie.com" />
 
     <!-- Assets críticos acima da dobra -->
-    <link rel="preload" as="image" href="/logo.png" fetchpriority="high" />
-    <link rel="preload" as="image" href="/bg_banner.png" fetchpriority="high" />
+    <link rel="preload" as="image" href="/logo.webp" type="image/webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="/bg_banner.webp" type="image/webp" fetchpriority="high" />
 
-    <!-- Fontes: peso reduzido — só os que usamos -->
+    <!-- Fontes: payload mínimo, swap pra evitar FOIT -->
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=Italianno&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@400;600&family=Italianno&display=swap"
     />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=Italianno&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@400;600&family=Italianno&display=swap"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Inter:wght@400;500;600&family=Italianno&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Inter:wght@400;600&family=Italianno&display=swap"
       />
     </noscript>
 
@@ -113,75 +115,75 @@ const {
       </a>
     </aside>
 
-    <!-- Animation engine — IO nativo (sem libs externas, bundle mínimo) -->
+    <!-- Animation engine — adiado para idle para não afetar FCP/LCP/TBT -->
     <script>
-      // Reveal on intersection — IntersectionObserver nativo, ~0 kb extra
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('in');
-              revealObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.15 }
-      );
-      document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => revealObserver.observe(el));
+      type IdleWin = Window & { requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number };
+      const idle = (cb: () => void, timeout = 1500) => {
+        const w = window as IdleWin;
+        if (typeof w.requestIdleCallback === 'function') w.requestIdleCallback(cb, { timeout });
+        else setTimeout(cb, 200);
+      };
 
-      // Parallax orbs (subtle, transform only)
-      const orbs = document.querySelectorAll<HTMLElement>("[data-parallax]");
-      if (orbs.length && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        let ticking = false;
-        const onScroll = () => {
-          if (ticking) return;
-          ticking = true;
-          requestAnimationFrame(() => {
-            const y = window.scrollY;
-            orbs.forEach((orb) => {
-              const speed = parseFloat(orb.dataset.parallax || "0.08");
-              orb.style.transform = `translate3d(0, ${y * speed}px, 0)`;
+      const initAnimations = () => {
+        // Reveal on intersection
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in');
+                revealObserver.unobserve(entry.target);
+              }
             });
-            ticking = false;
-          });
-        };
-        window.addEventListener("scroll", onScroll, { passive: true });
-      }
+          },
+          { threshold: 0.15 }
+        );
+        document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => revealObserver.observe(el));
 
-      // Sticky CTA mobile — show after hero, hide near offer
-      const stickyCta = document.getElementById("stickyCta");
-      const heroSection = document.querySelector<HTMLElement>(".hero-section");
-      const offerSection = document.getElementById("oferta");
-      if (stickyCta && heroSection) {
-        const updateSticky = () => {
-          const heroBottom = heroSection.getBoundingClientRect().bottom;
-          const offerRect = offerSection?.getBoundingClientRect();
-          const nearOffer = offerRect ? offerRect.top < window.innerHeight * 0.85 && offerRect.bottom > 0 : false;
-          const shouldShow = heroBottom < 0 && !nearOffer;
-          stickyCta.classList.toggle("is-visible", shouldShow);
-          stickyCta.setAttribute("aria-hidden", String(!shouldShow));
-        };
-        updateSticky();
-        window.addEventListener("scroll", updateSticky, { passive: true });
-        window.addEventListener("resize", updateSticky);
-      }
+        // Parallax orbs — só em desktop e quando não há reduce-motion;
+        // no mobile causava forced reflows que arruinavam o TBT do Lighthouse
+        const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (isDesktop && !reducedMotion) {
+          const orbs = document.querySelectorAll<HTMLElement>('[data-parallax]');
+          if (orbs.length) {
+            let ticking = false;
+            const onScroll = () => {
+              if (ticking) return;
+              ticking = true;
+              requestAnimationFrame(() => {
+                const y = window.scrollY;
+                orbs.forEach((orb) => {
+                  const speed = parseFloat(orb.dataset.parallax || '0.08');
+                  orb.style.transform = `translate3d(0, ${y * speed}px, 0)`;
+                });
+                ticking = false;
+              });
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+          }
+        }
 
-      // Auto-scroll testimonial carousel (pauses on hover/touch)
-      const carousel = document.querySelector<HTMLElement>("[data-carousel]");
-      if (carousel && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        let paused = false;
-        let direction = 1;
-        carousel.addEventListener("mouseenter", () => (paused = true));
-        carousel.addEventListener("mouseleave", () => (paused = false));
-        carousel.addEventListener("touchstart", () => (paused = true), { passive: true });
-        setInterval(() => {
-          if (paused) return;
-          const max = carousel.scrollWidth - carousel.clientWidth;
-          if (carousel.scrollLeft >= max - 4) direction = -1;
-          else if (carousel.scrollLeft <= 4) direction = 1;
-          carousel.scrollBy({ left: direction * 320, behavior: "smooth" });
-        }, 5000);
-      }
+        // Sticky CTA mobile
+        const stickyCta = document.getElementById('stickyCta');
+        const heroSection = document.querySelector<HTMLElement>('.hero-section');
+        const offerSection = document.getElementById('oferta');
+        if (stickyCta && heroSection) {
+          const updateSticky = () => {
+            const heroBottom = heroSection.getBoundingClientRect().bottom;
+            const offerRect = offerSection?.getBoundingClientRect();
+            const nearOffer = offerRect ? offerRect.top < window.innerHeight * 0.85 && offerRect.bottom > 0 : false;
+            const shouldShow = heroBottom < 0 && !nearOffer;
+            stickyCta.classList.toggle('is-visible', shouldShow);
+            stickyCta.setAttribute('aria-hidden', String(!shouldShow));
+          };
+          updateSticky();
+          window.addEventListener('scroll', updateSticky, { passive: true });
+          window.addEventListener('resize', updateSticky);
+        }
+      };
+
+      if (document.readyState === 'complete') idle(initAnimations);
+      else window.addEventListener('load', () => idle(initAnimations), { once: true });
     </script>
   </body>
 </html>

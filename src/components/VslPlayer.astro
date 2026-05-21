@@ -15,20 +15,32 @@ const embedUrl =
   `?autoplay=1&mute=1&loop=1&playlist=${videoId}` +
   `&playsinline=1&controls=0&rel=0&modestbranding=1&iv_load_policy=3` +
   `&enablejsapi=1`;
+const posterUrl = `https://i.ytimg.com/vi_webp/${videoId}/maxresdefault.webp`;
+const posterFallback = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
 ---
 
-<div class="vsl-player relative overflow-hidden rounded-[14px]" style="aspect-ratio: 16/9;" data-vsl>
-  <iframe
-    class="absolute inset-0 h-full w-full"
-    src={embedUrl}
-    title={title}
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-    allowfullscreen
-    loading="eager"
-    data-vsl-iframe
-  ></iframe>
+<div
+  class="vsl-player relative overflow-hidden rounded-[14px]"
+  style="aspect-ratio: 16/9;"
+  data-vsl
+  data-vsl-src={embedUrl}
+  data-vsl-title={title}
+>
+  <!-- Poster facade: zero JS até o usuário interagir -->
+  <picture class="vsl-poster absolute inset-0">
+    <source srcset={posterUrl} type="image/webp" />
+    <img
+      src={posterFallback}
+      alt={title}
+      class="absolute inset-0 h-full w-full object-cover"
+      width="1280"
+      height="720"
+      loading="lazy"
+      decoding="async"
+    />
+  </picture>
 
-  <!-- Overlay clicável: ativa som + reinicia -->
+  <!-- Overlay clicável: monta o iframe e ativa som -->
   <button
     type="button"
     class="vsl-overlay group absolute inset-0 z-30 flex flex-col items-center justify-center gap-3 text-[#FFFEFB]"
@@ -55,20 +67,70 @@ const embedUrl =
 </div>
 
 <script>
-  const overlays = document.querySelectorAll<HTMLElement>('[data-vsl-overlay]');
-  overlays.forEach((overlay) => {
+  const players = document.querySelectorAll<HTMLElement>('[data-vsl]');
+
+  players.forEach((player) => {
+    const overlay = player.querySelector<HTMLElement>('[data-vsl-overlay]');
+    const poster = player.querySelector<HTMLElement>('.vsl-poster');
+    const src = player.getAttribute('data-vsl-src');
+    const title = player.getAttribute('data-vsl-title') || '';
+    if (!overlay || !src) return;
+
+    let mounted = false;
+    let iframeEl: HTMLIFrameElement | null = null;
+
+    const mountIframe = () => {
+      if (mounted) return iframeEl;
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.title = title;
+      iframe.className = 'absolute inset-0 h-full w-full';
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('loading', 'eager');
+      iframe.setAttribute('data-vsl-iframe', '');
+      player.insertBefore(iframe, overlay);
+      mounted = true;
+      iframeEl = iframe;
+      if (poster) (poster as HTMLElement).style.display = 'none';
+      return iframe;
+    };
+
+    // Autoplay mudo, mas só DEPOIS do load — assim o YouTube JS
+    // não bloqueia FCP/LCP. requestIdleCallback quando disponível,
+    // senão setTimeout como fallback.
+    const scheduleAutoMount = () => {
+      const w = window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number };
+      if (typeof w.requestIdleCallback === 'function') {
+        w.requestIdleCallback(() => mountIframe(), { timeout: 2500 });
+      } else {
+        setTimeout(() => mountIframe(), 1200);
+      }
+    };
+    if (document.readyState === 'complete') {
+      scheduleAutoMount();
+    } else {
+      window.addEventListener('load', scheduleAutoMount, { once: true });
+    }
+
     overlay.addEventListener('click', () => {
-      const player = overlay.parentElement;
-      const iframe = player?.querySelector<HTMLIFrameElement>('[data-vsl-iframe]');
-      if (!iframe?.contentWindow) return;
-      const win = iframe.contentWindow;
+      const iframe = mountIframe();
+      if (!iframe?.contentWindow) {
+        overlay.classList.add('is-hidden');
+        return;
+      }
       const send = (func: string, args: unknown = '') => {
-        win.postMessage(JSON.stringify({ event: 'command', func, args }), '*');
+        iframe.contentWindow?.postMessage(JSON.stringify({ event: 'command', func, args }), '*');
       };
-      send('unMute');
-      send('setVolume', [100]);
-      send('seekTo', [0, true]);
-      send('playVideo');
+      const fire = () => {
+        send('unMute');
+        send('setVolume', [100]);
+        send('seekTo', [0, true]);
+        send('playVideo');
+      };
+      iframe.addEventListener('load', fire, { once: true });
+      // Se o iframe já tinha sido pré-montado pelo idle, dispara também agora
+      setTimeout(fire, 50);
       overlay.classList.add('is-hidden');
     });
   });

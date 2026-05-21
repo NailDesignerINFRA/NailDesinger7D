@@ -8,20 +8,18 @@ import VslPlayer from "./VslPlayer.astro";
        BACKGROUND VIDEO — Cinematic full screen
        ───────────────────────────────────────── -->
   <div class="absolute inset-0 -z-10">
-    <!-- Video hero: autoplay mudo + loop. Poster carrega antes pra evitar CLS -->
-    <video
+    <!-- Imagem de fundo sempre visível: serve como poster e fallback mobile -->
+    <img
+      src="/bg_banner.webp"
+      alt=""
       class="absolute inset-0 w-full h-full object-cover"
-      autoplay
-      muted
-      loop
-      playsinline
-      preload="metadata"
-      poster="/bg_banner.png"
-      aria-hidden="true"
-    >
-      <source src="/hero.mp4" type="video/mp4" />
-      <img src="/bg_banner.png" alt="" class="absolute inset-0 w-full h-full object-cover" width="1920" height="1080" />
-    </video>
+      width="1920"
+      height="1080"
+      fetchpriority="high"
+      decoding="async"
+    />
+    <!-- Video hero: só monta no desktop e depois do load (perf mobile) -->
+    <div class="absolute inset-0" data-hero-video data-hero-src="/hero.mp4" aria-hidden="true"></div>
 
     <!-- Overlays para legibilidade do texto sobre o vídeo -->
     <div class="absolute inset-0 bg-gradient-to-b from-[#1A140C]/55 via-[#1A140C]/30 to-[#1A140C]/85"></div>
@@ -45,11 +43,11 @@ import VslPlayer from "./VslPlayer.astro";
   <div class="hero-shell relative z-10 mx-auto flex w-full max-w-[1100px] xl:max-w-[1240px] 2xl:max-w-[1400px] flex-1 flex-col items-center justify-center px-3.5 pb-6 pt-4 text-center sm:px-6 sm:pt-10 sm:pb-14 lg:px-10">
 
     <!-- ───────── LOGO ───────── -->
-    <div class="hero-logo reveal w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[330px] xl:max-w-[360px] 2xl:max-w-[400px] flex justify-center overflow-hidden">
+    <div class="hero-logo reveal w-full max-w-[260px] sm:max-w-[300px] lg:max-w-[330px] xl:max-w-[360px] 2xl:max-w-[400px] flex justify-center">
       <img
-        src="/logo.png"
+        src="/logo.webp"
         alt="Curso Express · Nail Designer 7D"
-        class="hero-logo__img w-full h-[4.5rem] sm:h-[5rem] xl:h-[5.5rem] 2xl:h-[6rem] object-cover object-center"
+        class="hero-logo__img w-full h-auto object-contain object-center"
         width="800"
         height="220"
         loading="eager"
@@ -120,6 +118,45 @@ import VslPlayer from "./VslPlayer.astro";
     </span>
   </a>
 </section>
+
+<script>
+  // Vídeo de fundo do hero: só monta no desktop e depois do load,
+  // pra não pesar nem na primeira pintura nem na nota mobile do Lighthouse.
+  const slots = document.querySelectorAll<HTMLElement>('[data-hero-video]');
+  if (slots.length && window.matchMedia('(min-width: 1024px)').matches) {
+    const mount = () => {
+      slots.forEach((slot) => {
+        if (slot.dataset.mounted) return;
+        slot.dataset.mounted = '1';
+        const src = slot.getAttribute('data-hero-src') || '';
+        const video = document.createElement('video');
+        video.className = 'absolute inset-0 w-full h-full object-cover';
+        video.autoplay = true;
+        video.muted = true;
+        video.loop = true;
+        video.playsInline = true;
+        video.preload = 'metadata';
+        video.setAttribute('aria-hidden', 'true');
+        const source = document.createElement('source');
+        source.src = src;
+        source.type = 'video/mp4';
+        video.appendChild(source);
+        slot.appendChild(video);
+        video.play().catch(() => { /* ignore autoplay rejection */ });
+      });
+    };
+    const w = window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout?: number }) => number };
+    const schedule = () => {
+      if (typeof w.requestIdleCallback === 'function') {
+        w.requestIdleCallback(mount, { timeout: 2000 });
+      } else {
+        setTimeout(mount, 800);
+      }
+    };
+    if (document.readyState === 'complete') schedule();
+    else window.addEventListener('load', schedule, { once: true });
+  }
+</script>
 
 <style>
   /* Logo: inverte o preto pra champanhe-creme para contrastar com o vídeo escuro */

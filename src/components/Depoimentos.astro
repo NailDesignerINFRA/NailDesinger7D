@@ -9,15 +9,15 @@ import Decor from "./Decor.astro";
  *   src:  nome do arquivo dentro de /public/depoimentos/
  */
 const testimonials = [
-  { type: "image", src: "01.png" },
-  { type: "image", src: "02.png" },
-  { type: "image", src: "03.png" },
-  { type: "image", src: "04.png" },
-  { type: "image", src: "05.png" },
-  { type: "image", src: "06.png" },
-  { type: "image", src: "07.png" },
-  { type: "image", src: "08.png" },
-  { type: "image", src: "09.png" },
+  { type: "image", src: "01.webp" },
+  { type: "image", src: "02.webp" },
+  { type: "image", src: "03.webp" },
+  { type: "image", src: "04.webp" },
+  { type: "image", src: "05.webp" },
+  { type: "image", src: "06.webp" },
+  { type: "image", src: "07.webp" },
+  { type: "image", src: "08.webp" },
+  { type: "image", src: "09.webp" },
 ] as const;
 
 // Duplicamos a lista para o loop infinito ser contínuo
@@ -102,7 +102,7 @@ const loop = [...testimonials, ...testimonials];
 
 <style>
   .marquee {
-    --marquee-duration: 70s;
+    --marquee-duration: 32s;
     --marquee-gap: 18px;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
@@ -116,12 +116,6 @@ const loop = [...testimonials, ...testimonials];
     width: max-content;
     animation: marquee-scroll var(--marquee-duration) linear infinite;
     will-change: transform;
-  }
-
-  /* Desacelera em hover/focus em vez de pausar */
-  .marquee:hover .marquee-track,
-  .marquee:focus-within .marquee-track {
-    animation-duration: calc(var(--marquee-duration) * 3.5);
   }
 
   .marquee-item {
@@ -160,7 +154,7 @@ const loop = [...testimonials, ...testimonials];
 
   @media (max-width: 639px) {
     .marquee {
-      --marquee-duration: 55s;
+      --marquee-duration: 26s;
       --marquee-gap: 12px;
     }
     .marquee-item {

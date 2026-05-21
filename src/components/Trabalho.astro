@@ -2,11 +2,11 @@
 import Decor from "./Decor.astro";
 
 const works = [
-  { src: "01.jpg", label: "Molde F1 · Acabamento natural" },
-  { src: "02.jpg", label: "Aplicação fina e nivelada" },
-  { src: "03.jpg", label: "Acabamento profissional" },
-  { src: "04.jpg", label: "Estrutura leve e elegante" },
-  { src: "05.png", label: "Detalhe da pega" },
+  { src: "01.webp", label: "Molde F1 · Acabamento natural" },
+  { src: "02.webp", label: "Aplicação fina e nivelada" },
+  { src: "03.webp", label: "Acabamento profissional" },
+  { src: "04.webp", label: "Estrutura leve e elegante" },
+  { src: "05.webp", label: "Detalhe da pega" },
 ];
 ---
 
@@ -29,78 +29,309 @@ const works = [
       </div>
     </div>
 
-    <!-- Galeria asimétrica · mosaic style -->
-    <div class="trabalho-grid reveal reveal-delay-2">
-      {works.map((w, i) => (
-        <figure class={`trabalho-item trabalho-item--${i + 1} group relative overflow-hidden rounded-[16px] sm:rounded-[20px] border border-[#C9A961]/22 shadow-[0_18px_50px_-26px_rgba(92,74,48,0.35)]`}>
-          <img
-            src={`/trabalho/${w.src}`}
-            alt={w.label}
-            class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-            width="720"
-            height="900"
-            loading="lazy"
-            decoding="async"
-          />
-          <!-- Overlay sutil só no hover -->
-          <figcaption class="absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 bg-gradient-to-t from-[#1A140C]/85 via-[#1A140C]/30 to-transparent text-[#FAF6EE] opacity-0 translate-y-2 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
-            <p class="text-[11px] uppercase tracking-[0.2em] text-[#E6CE94]/90">{String(i + 1).padStart(2, "0")}</p>
-            <p class="text-[13px] sm:text-[13.5px] mt-1 leading-snug">{w.label}</p>
-          </figcaption>
-          <!-- Pearl decor -->
-          <span class="absolute top-2.5 right-2.5 z-10 w-2.5 h-2.5 rounded-full bg-[#E6CE94]/85 shadow-[0_0_12px_rgba(230,206,148,0.6)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
-        </figure>
-      ))}
+    <!-- Carrossel manual -->
+    <div class="trab-carousel reveal reveal-delay-2" data-trab-carousel>
+      <button
+        type="button"
+        class="trab-nav trab-nav--prev"
+        aria-label="Foto anterior"
+        data-trab-prev
+      >
+        <svg viewBox="0 0 24 24" class="h-4 w-4 sm:h-5 sm:w-5 fill-none stroke-current" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 6l-6 6 6 6" />
+        </svg>
+      </button>
+
+      <div class="trab-viewport" data-trab-viewport>
+        <ul class="trab-track" data-trab-track>
+          {works.map((w, i) => (
+            <li class="trab-slide" data-trab-slide>
+              <figure class="group relative overflow-hidden rounded-[18px] border border-[#C9A961]/22 shadow-[0_18px_50px_-26px_rgba(92,74,48,0.35)]">
+                <img
+                  src={`/trabalho/${w.src}`}
+                  alt={w.label}
+                  class="block w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  width="720"
+                  height="900"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption class="absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 bg-gradient-to-t from-[#1A140C]/85 via-[#1A140C]/30 to-transparent text-[#FAF6EE]">
+                  <p class="text-[11px] uppercase tracking-[0.2em] text-[#E6CE94]/90">{String(i + 1).padStart(2, "0")}</p>
+                  <p class="text-[13px] sm:text-[13.5px] mt-1 leading-snug">{w.label}</p>
+                </figcaption>
+                <span class="absolute top-2.5 right-2.5 z-10 w-2.5 h-2.5 rounded-full bg-[#E6CE94]/85 shadow-[0_0_12px_rgba(230,206,148,0.6)]"></span>
+              </figure>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button
+        type="button"
+        class="trab-nav trab-nav--next"
+        aria-label="Próxima foto"
+        data-trab-next
+      >
+        <svg viewBox="0 0 24 24" class="h-4 w-4 sm:h-5 sm:w-5 fill-none stroke-current" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M9 6l6 6-6 6" />
+        </svg>
+      </button>
+
+      <div class="trab-dots" data-trab-dots role="tablist" aria-label="Selecionar foto">
+        {works.map((_, i) => (
+          <button
+            type="button"
+            class={`trab-dot${i === 0 ? " is-active" : ""}`}
+            data-trab-dot={i}
+            aria-label={`Ir para foto ${i + 1}`}
+            role="tab"
+            aria-selected={i === 0 ? "true" : "false"}
+          ></button>
+        ))}
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  /* Mosaic responsivo */
-  .trabalho-grid {
+  .trab-carousel {
+    position: relative;
     display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
     gap: 12px;
-    grid-template-columns: 1fr 1fr;
-    grid-auto-rows: 180px;
   }
-  .trabalho-item {
-    aspect-ratio: auto;
+
+  .trab-viewport {
+    overflow: hidden;
+    border-radius: 20px;
   }
-  /* Mobile: 2 col, 1ª foto destaque ocupando linha cheia */
-  .trabalho-item--1 {
-    grid-column: span 2;
-    grid-row: span 1;
+
+  .trab-track {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    transition: transform 600ms var(--ease-premium);
+    will-change: transform;
+  }
+
+  .trab-slide {
+    flex: 0 0 100%;
+    padding: 0 6px;
+  }
+
+  .trab-slide figure {
+    aspect-ratio: 4 / 5;
+    margin: 0;
   }
 
   @media (min-width: 640px) {
-    .trabalho-grid {
-      grid-template-columns: 1fr 1fr 1fr;
-      grid-auto-rows: 200px;
-      gap: 14px;
+    .trab-slide {
+      flex: 0 0 50%;
     }
-    .trabalho-item--1 {
-      grid-column: span 2;
-      grid-row: span 2;
-    }
-    .trabalho-item--4 {
-      grid-column: span 1;
-    }
-    .trabalho-item--5 {
-      grid-column: span 1;
+    .trab-slide figure {
+      aspect-ratio: 4 / 5;
     }
   }
 
   @media (min-width: 1024px) {
-    .trabalho-grid {
-      grid-template-columns: repeat(4, 1fr);
-      grid-auto-rows: 240px;
-      gap: 16px;
+    .trab-slide {
+      flex: 0 0 33.3333%;
+      padding: 0 8px;
     }
-    /* Layout editorial: 1ª maior (2x2), demais distribuídas */
-    .trabalho-item--1 { grid-column: span 2; grid-row: span 2; }
-    .trabalho-item--2 { grid-column: span 2; grid-row: span 1; }
-    .trabalho-item--3 { grid-column: span 1; grid-row: span 1; }
-    .trabalho-item--4 { grid-column: span 1; grid-row: span 1; }
-    .trabalho-item--5 { grid-column: span 2; grid-row: span 1; }
+  }
+
+  .trab-nav {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 999px;
+    border: 1px solid rgba(201, 169, 97, 0.45);
+    background: linear-gradient(180deg, rgba(255, 254, 251, 0.92), rgba(244, 228, 193, 0.6));
+    color: #5C4A30;
+    box-shadow: 0 10px 30px -14px rgba(92, 74, 48, 0.35);
+    cursor: pointer;
+    transition:
+      transform 300ms var(--ease-premium),
+      background 300ms var(--ease-premium),
+      box-shadow 300ms var(--ease-premium);
+    z-index: 2;
+  }
+
+  .trab-nav:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(180deg, #FFFEFB, #F9EFD9);
+    box-shadow: 0 14px 36px -14px rgba(168, 136, 66, 0.55);
+  }
+
+  .trab-nav:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  .trab-nav:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  @media (min-width: 640px) {
+    .trab-nav {
+      width: 46px;
+      height: 46px;
+    }
+  }
+
+  .trab-dots {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .trab-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: 0;
+    padding: 0;
+    background: rgba(139, 111, 71, 0.28);
+    cursor: pointer;
+    transition: all 300ms var(--ease-premium);
+  }
+
+  .trab-dot:hover {
+    background: rgba(139, 111, 71, 0.55);
+  }
+
+  .trab-dot.is-active {
+    width: 24px;
+    background: linear-gradient(90deg, #C9A961, #8B6F47);
+  }
+
+  .trab-dot:focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 639px) {
+    .trab-carousel {
+      gap: 6px;
+    }
+    .trab-nav {
+      width: 36px;
+      height: 36px;
+    }
   }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-trab-carousel]").forEach((root) => {
+    const track = root.querySelector<HTMLElement>("[data-trab-track]");
+    const viewport = root.querySelector<HTMLElement>("[data-trab-viewport]");
+    const slides = Array.from(root.querySelectorAll<HTMLElement>("[data-trab-slide]"));
+    const prev = root.querySelector<HTMLButtonElement>("[data-trab-prev]");
+    const next = root.querySelector<HTMLButtonElement>("[data-trab-next]");
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>("[data-trab-dot]"));
+
+    if (!track || !viewport || slides.length === 0) return;
+
+    let index = 0;
+
+    const slidesPerView = () => {
+      const w = window.innerWidth;
+      if (w >= 1024) return 3;
+      if (w >= 640) return 2;
+      return 1;
+    };
+
+    const maxIndex = () => Math.max(0, slides.length - slidesPerView());
+
+    const update = () => {
+      index = Math.min(Math.max(index, 0), maxIndex());
+      const offset = -(index * (100 / slidesPerView()));
+      track.style.transform = `translateX(${offset}%)`;
+      dots.forEach((dot, i) => {
+        const active = i === index;
+        dot.classList.toggle("is-active", active);
+        dot.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      if (prev) prev.disabled = index <= 0;
+      if (next) next.disabled = index >= maxIndex();
+    };
+
+    prev?.addEventListener("click", () => {
+      index -= 1;
+      update();
+    });
+
+    next?.addEventListener("click", () => {
+      index += 1;
+      update();
+    });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => {
+        index = Math.min(i, maxIndex());
+        update();
+      });
+    });
+
+    // Swipe / drag (touch + mouse)
+    let startX = 0;
+    let dragging = false;
+    let moved = 0;
+
+    const onStart = (x: number) => {
+      dragging = true;
+      startX = x;
+      moved = 0;
+    };
+    const onMove = (x: number) => {
+      if (!dragging) return;
+      moved = x - startX;
+    };
+    const onEnd = () => {
+      if (!dragging) return;
+      dragging = false;
+      const threshold = 40;
+      if (moved < -threshold) {
+        index += 1;
+        update();
+      } else if (moved > threshold) {
+        index -= 1;
+        update();
+      }
+    };
+
+    viewport.addEventListener("touchstart", (e) => onStart(e.touches[0].clientX), { passive: true });
+    viewport.addEventListener("touchmove", (e) => onMove(e.touches[0].clientX), { passive: true });
+    viewport.addEventListener("touchend", onEnd);
+
+    viewport.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      onStart(e.clientX);
+    });
+    window.addEventListener("mousemove", (e) => onMove(e.clientX));
+    window.addEventListener("mouseup", onEnd);
+
+    // Keyboard
+    root.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        index -= 1;
+        update();
+      } else if (e.key === "ArrowRight") {
+        index += 1;
+        update();
+      }
+    });
+
+    window.addEventListener("resize", update);
+    update();
+  });
+</script>
