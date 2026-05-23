@@ -1,0 +1,9 @@
+{
+  "name": "naildesigner7d",
+  "version": "1.0.0",
+  "description": "Site institucional Nail Designer 7D - estatico (HTML/CSS/JS puro)",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Site estatico - sem build step necessario.' && exit 0"
+  }
+}
