@@ -1,0 +1,7 @@
+# Cloudflare Pages — redirects
+# Formato: /from /to [status]
+# Status comuns: 301 (permanente), 302 (temporário), 200 (rewrite/proxy)
+# Vazio por enquanto — adicionar conforme necessário.
+
+# Exemplo: redirecionar /comprar pro hotmart diretamente
+# /comprar https://pay.hotmart.com/N95036193B?checkoutMode=10 302

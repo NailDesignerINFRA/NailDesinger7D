@@ -1,0 +1,41 @@
+# ============================================================
+# Cloudflare Pages — Headers de cache + segurança
+# Cada bloco aplica os headers aos paths que o match.
+# Cache agressivo em assets imutáveis (imagens), curto em HTML.
+# ============================================================
+
+# HTML — sempre buscar fresh (deploy novo deve aparecer imediato)
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Imagens — cache longo (1 ano), imutável
+/imagem/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fotosunha/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS — cache 1 dia (atualizações de design aparecem rápido sem ser instantâneo)
+/styles.css
+  Cache-Control: public, max-age=86400, must-revalidate
+
+# JS — mesmo cache do CSS
+/script.js
+  Cache-Control: public, max-age=86400, must-revalidate
+
+# Headers gerais de segurança em todas as rotas
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
