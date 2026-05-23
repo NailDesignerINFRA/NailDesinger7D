@@ -58,6 +58,26 @@ img { display: block; max-width: 100%; height: auto; }
 a { color: inherit; text-decoration: none; }
 
 /* ============================================================
+   ANTI-ÓRFÃOS — nunca deixar 1 palavra/frase sozinha na última linha
+   - balance: distribui equilibrado em títulos (curtos, 1–4 linhas)
+   - pretty:  evita a última linha "viúva" em parágrafos longos
+   ============================================================ */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  -webkit-text-wrap: balance;
+}
+p, li, dd, blockquote {
+  text-wrap: pretty;
+  -webkit-text-wrap: pretty;
+}
+
+/* Quebra de linha exclusiva no mobile (≤520px) — usada em CTAs longos */
+.cta-mobile-br { display: none; }
+@media (max-width: 520px) {
+  .cta-mobile-br { display: inline; }
+}
+
+/* ============================================================
    HERO
    ============================================================ */
 
@@ -441,7 +461,71 @@ a { color: inherit; text-decoration: none; }
   width: 100%;
   height: 100%;
   border: 0;
-  pointer-events: none; /* segundo plano — usuário não interage */
+  pointer-events: none; /* clicks são capturados pelo overlay abaixo */
+}
+
+/* Overlay invisível — captura clique pra dar play/pause em qualquer lugar */
+.hero__video-toggle {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.hero__video-toggle:focus-visible {
+  outline: 2px solid var(--c-accent-soft);
+  outline-offset: -4px;
+}
+/* Indicador sutil de play/pause central que aparece no clique */
+.hero__video-wrap::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 78px;
+  height: 78px;
+  border-radius: 999px;
+  background: rgba(20, 16, 12, .75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translate(-50%, -50%) scale(.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+  z-index: 3;
+  /* Triângulo de "play" centralizado (default state) */
+  background-image:
+    linear-gradient(transparent, transparent),
+    linear-gradient(transparent, transparent);
+}
+.hero__video-wrap.show-toggle-feedback::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+/* Ícone via mask: muda entre play/pause */
+.hero__video-wrap .hero__video-state-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%) scale(.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+  z-index: 4;
+  color: #f6ecdb;
+}
+.hero__video-wrap.show-toggle-feedback .hero__video-state-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 /* Botão "Clique para ativar o som" sobre o vídeo */
@@ -855,22 +939,22 @@ a { color: inherit; text-decoration: none; }
     max-width: 100%;
     text-align: center;
   }
-  .hero__cta {
-    order: 4;
-    width: auto;
-    min-width: 260px;
-    margin: 8px auto 0;
-    align-self: center;
-  }
   .hero__expert {
-    order: 5;
+    order: 4;
     position: relative;
-    margin: 28px auto 12px;
+    margin: 16px auto 8px;
     align-self: center;
     width: 100%;
     max-width: 420px;
     justify-content: center;
     overflow: visible;
+  }
+  .hero__cta {
+    order: 5;
+    width: auto;
+    min-width: 260px;
+    margin: 12px auto 0;
+    align-self: center;
   }
   .hero__date {
     order: 6;
@@ -1094,7 +1178,7 @@ a { color: inherit; text-decoration: none; }
     radial-gradient(ellipse at 50% 0%, rgba(184, 118, 58, .08), transparent 55%),
     radial-gradient(ellipse at 50% 100%, rgba(211, 154, 95, .06), transparent 60%),
     linear-gradient(180deg, var(--c-bg-soft) 0%, var(--c-bg) 100%);
-  padding: clamp(56px, 8vw, 100px) 0 clamp(56px, 8vw, 100px);
+  padding: clamp(28px, 4.5vw, 56px) 0 clamp(56px, 8vw, 100px);
   overflow: hidden;
   isolation: isolate;
 }
@@ -1310,7 +1394,7 @@ a { color: inherit; text-decoration: none; }
     radial-gradient(ellipse at 80% 100%, rgba(184, 118, 58, .12), transparent 55%),
     linear-gradient(180deg, #fdfaf3 0%, #f6ecdb 100%);
   color: var(--c-text);
-  padding: clamp(70px, 10vw, 130px) 0;
+  padding: clamp(28px, 4.5vw, 56px) 0 clamp(70px, 10vw, 130px);
   overflow: hidden;
   isolation: isolate;
 }
@@ -2062,7 +2146,7 @@ a { color: inherit; text-decoration: none; }
   background:
     url("imagem/bloco4.png") center center / cover no-repeat,
     #2a2118;
-  padding: clamp(80px, 12vw, 160px) 0;
+  padding: clamp(40px, 6vw, 80px) 0 clamp(80px, 12vw, 160px);
   overflow: hidden;
   isolation: isolate;
 }
@@ -2238,7 +2322,7 @@ a { color: inherit; text-decoration: none; }
     radial-gradient(ellipse at 0% 20%, rgba(244, 228, 193, .35), transparent 55%),
     radial-gradient(ellipse at 100% 80%, rgba(184, 118, 58, .12), transparent 55%),
     linear-gradient(180deg, var(--c-bg-soft) 0%, #f7e8d3 100%);
-  padding: clamp(70px, 10vw, 130px) 0 clamp(90px, 12vw, 160px);
+  padding: clamp(28px, 4.5vw, 56px) 0 clamp(90px, 12vw, 160px);
   overflow: hidden;
   isolation: isolate;
 }
@@ -2751,7 +2835,7 @@ a { color: inherit; text-decoration: none; }
   background:
     radial-gradient(ellipse at 0% 0%, rgba(184, 118, 58, .08), transparent 55%),
     linear-gradient(180deg, #fdfaf3 0%, var(--c-bg-soft) 100%);
-  padding: clamp(60px, 9vw, 110px) 0;
+  padding: clamp(36px, 5vw, 64px) 0 clamp(60px, 9vw, 110px);
   overflow: hidden;
 }
 .depoimentos__head {
@@ -2905,7 +2989,7 @@ a { color: inherit; text-decoration: none; }
     radial-gradient(ellipse at 50% 0%, rgba(244, 228, 193, .35), transparent 50%),
     radial-gradient(ellipse at 100% 100%, rgba(184, 118, 58, .08), transparent 50%),
     linear-gradient(180deg, #ffffff 0%, #fdfaf3 100%);
-  padding: clamp(60px, 9vw, 110px) 0;
+  padding: clamp(36px, 5vw, 64px) 0 clamp(60px, 9vw, 110px);
   overflow: hidden;
   isolation: isolate;
 }
@@ -3464,7 +3548,7 @@ a { color: inherit; text-decoration: none; }
   background:
     radial-gradient(ellipse at 80% 0%, rgba(184, 118, 58, .08), transparent 60%),
     linear-gradient(180deg, var(--c-bg) 0%, var(--c-bg-soft) 100%);
-  padding: clamp(60px, 9vw, 110px) 0;
+  padding: clamp(36px, 5vw, 64px) 0 clamp(60px, 9vw, 110px);
 }
 .realidade__head {
   text-align: center;
@@ -3590,7 +3674,7 @@ a { color: inherit; text-decoration: none; }
   background:
     radial-gradient(ellipse at 50% 0%, rgba(184, 118, 58, .06), transparent 50%),
     var(--c-bg-soft);
-  padding: clamp(60px, 9vw, 110px) 0;
+  padding: clamp(36px, 5vw, 64px) 0 clamp(60px, 9vw, 110px);
 }
 .faq__head {
   text-align: center;

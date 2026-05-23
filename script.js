@@ -113,7 +113,9 @@
      ----------------------------------------------------------- */
   const heroIframe = document.getElementById("heroVideo");
   const unmuteBtn  = document.querySelector("[data-hero-unmute]");
-  if (heroIframe && unmuteBtn) {
+  const toggleBtn  = document.querySelector("[data-hero-toggle]");
+  const videoWrap  = heroIframe ? heroIframe.parentElement : null;
+  if (heroIframe) {
     const sendCmd = (func, args = "") => {
       try {
         heroIframe.contentWindow.postMessage(
@@ -122,14 +124,58 @@
         );
       } catch (_) { /* ignore */ }
     };
-    unmuteBtn.addEventListener("click", () => {
-      sendCmd("unMute");
-      sendCmd("setVolume", [100]);
-      sendCmd("playVideo");
-      unmuteBtn.classList.add("is-hidden");
-      // Remove totalmente após a transição pra liberar o canto do vídeo
-      setTimeout(() => unmuteBtn.remove(), 600);
-    });
+
+    // Estado local — começa tocando (autoplay=1 na URL)
+    let isPlaying = true;
+    let feedbackTimer = null;
+
+    // Cria ícone central de feedback (play/pause)
+    let stateIcon = null;
+    if (videoWrap) {
+      stateIcon = document.createElement("span");
+      stateIcon.className = "hero__video-state-icon";
+      stateIcon.setAttribute("aria-hidden", "true");
+      videoWrap.appendChild(stateIcon);
+    }
+    const PLAY_SVG  = '<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg>';
+    const PAUSE_SVG = '<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>';
+
+    const showFeedback = (playing) => {
+      if (!videoWrap || !stateIcon) return;
+      stateIcon.innerHTML = playing ? PAUSE_SVG : PLAY_SVG;
+      videoWrap.classList.add("show-toggle-feedback");
+      if (feedbackTimer) clearTimeout(feedbackTimer);
+      feedbackTimer = setTimeout(() => {
+        videoWrap.classList.remove("show-toggle-feedback");
+      }, 700);
+    };
+
+    // Botão "Ativar som" — tira mute + vol 100 + garante play
+    if (unmuteBtn) {
+      unmuteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        sendCmd("unMute");
+        sendCmd("setVolume", [100]);
+        sendCmd("playVideo");
+        isPlaying = true;
+        unmuteBtn.classList.add("is-hidden");
+        setTimeout(() => unmuteBtn.remove(), 600);
+      });
+    }
+
+    // Clique em qualquer lugar do vídeo → toggle play/pause
+    if (toggleBtn) {
+      toggleBtn.addEventListener("click", () => {
+        if (isPlaying) {
+          sendCmd("pauseVideo");
+          isPlaying = false;
+        } else {
+          sendCmd("playVideo");
+          isPlaying = true;
+        }
+        showFeedback(isPlaying);
+      });
+    }
   }
 
   /* -----------------------------------------------------------
