@@ -5,7 +5,7 @@
 # pipeline do Cloudflare em todo push pra main).
 # ============================================================
 
-name = "naildesigner7d"
+name = "nail"
 compatibility_date = "2025-05-23"
 
 # Diretorio de assets estaticos servidos pelo Worker.
