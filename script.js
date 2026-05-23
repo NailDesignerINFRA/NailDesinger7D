@@ -29,6 +29,30 @@
   });
 
   /* -----------------------------------------------------------
+     DEPOIMENTOS — botão "Exibir mais" / "Mostrar menos"
+     ----------------------------------------------------------- */
+  const depToggle = document.querySelector("[data-depoimentos-toggle]");
+  const depList   = document.querySelector("[data-depoimentos-list]");
+  if (depToggle && depList) {
+    const depLabel = depToggle.querySelector(".depoimentos__more-label");
+    depToggle.addEventListener("click", () => {
+      const isExpanded = depList.classList.toggle("is-expanded");
+      depToggle.classList.toggle("is-expanded", isExpanded);
+      if (depLabel) {
+        depLabel.textContent = isExpanded
+          ? "Mostrar menos depoimentos"
+          : "Exibir mais depoimentos";
+      }
+      // Re-observa novos cards revelados para a animação data-fly disparar
+      if (isExpanded) {
+        depList.querySelectorAll(".depoimentos__card.is-hidden[data-fly]").forEach((card) => {
+          if (window.__flyObserver) window.__flyObserver.observe(card);
+        });
+      }
+    });
+  }
+
+  /* -----------------------------------------------------------
      REVEAL scroll-driven (Benefícios closer + outros [data-reveal])
      ----------------------------------------------------------- */
   const revealLines = document.querySelectorAll("[data-reveal]");
@@ -76,6 +100,8 @@
       }
     );
     flyEls.forEach((el) => flyIO.observe(el));
+    // Exporta pro toggle dos depoimentos conseguir re-observar cards revelados
+    window.__flyObserver = flyIO;
   }
 
   /* -----------------------------------------------------------
