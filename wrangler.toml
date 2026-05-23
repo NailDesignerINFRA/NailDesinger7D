@@ -1,12 +1,15 @@
 # ============================================================
-# Cloudflare Pages — config do projeto Nail Designer 7D
-# Deploy é feito automaticamente via GitHub.
-# Este arquivo permite usar `wrangler pages` localmente também.
+# Cloudflare Workers + Static Assets — Nail Designer 7D
+# Site estatico (HTML/CSS/JS puro) servido via Workers Assets.
+# Deploy via `wrangler deploy` (rodado automaticamente pelo
+# pipeline do Cloudflare em todo push pra main).
 # ============================================================
 
 name = "naildesigner7d"
 compatibility_date = "2025-05-23"
-pages_build_output_dir = "."
 
-# Não há build step — site estático (HTML/CSS/JS puro).
-# O Cloudflare Pages serve direto os arquivos do root.
+# Diretorio de assets estaticos servidos pelo Worker.
+# "." = raiz do repo (onde estao index.html, styles.css, etc).
+[assets]
+directory = "."
+not_found_handling = "404-page"
