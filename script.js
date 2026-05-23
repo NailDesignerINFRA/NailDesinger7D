@@ -90,18 +90,46 @@
     const flyIO = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          // Toggle: anima ao entrar, volta ao sair (some quando scroll up/down sai)
-          entry.target.classList.toggle("is-in", entry.isIntersecting);
+          // One-way: anima ao entrar e desconecta — evita "tremor" no boundary
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            flyIO.unobserve(entry.target);
+          }
         });
       },
       {
-        threshold: 0.18,
-        rootMargin: "-6% 0px -6% 0px",
+        threshold: 0.15,
+        rootMargin: "0px 0px -8% 0px",
       }
     );
     flyEls.forEach((el) => flyIO.observe(el));
     // Exporta pro toggle dos depoimentos conseguir re-observar cards revelados
     window.__flyObserver = flyIO;
+  }
+
+  /* -----------------------------------------------------------
+     HERO VIDEO — Botão "Clique para ativar o som"
+     Usa postMessage da YouTube IFrame API (enablejsapi=1 na URL)
+     ----------------------------------------------------------- */
+  const heroIframe = document.getElementById("heroVideo");
+  const unmuteBtn  = document.querySelector("[data-hero-unmute]");
+  if (heroIframe && unmuteBtn) {
+    const sendCmd = (func, args = "") => {
+      try {
+        heroIframe.contentWindow.postMessage(
+          JSON.stringify({ event: "command", func: func, args: args }),
+          "*"
+        );
+      } catch (_) { /* ignore */ }
+    };
+    unmuteBtn.addEventListener("click", () => {
+      sendCmd("unMute");
+      sendCmd("setVolume", [100]);
+      sendCmd("playVideo");
+      unmuteBtn.classList.add("is-hidden");
+      // Remove totalmente após a transição pra liberar o canto do vídeo
+      setTimeout(() => unmuteBtn.remove(), 600);
+    });
   }
 
   /* -----------------------------------------------------------
